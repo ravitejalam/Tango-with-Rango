@@ -1,0 +1,13 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+    About
+{% endblock %}
+{% block body_block %}
+<link rel="stylesheet" href="{% static "css/base.css" %}" /> <!-- CSS -->
+<script src="{% static "js/jquery.js" %}"></script> <!-- JavaScript -->
+</head>
+<body>
+<h1>This is About page</h1>
+<img src="{% static "wallmax.jpg" %}" alt="Picture in About" /> <!-- Images -->
+{% endblock %}
