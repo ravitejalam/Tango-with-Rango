@@ -1,0 +1,21 @@
+{% extends "rango/base.html" %}
+{% load staticfiles %}
+{% block title %}Search{% endblock %}
+{% block body_block %}
+<div class="hero-unit">
+    <h1>Search with Rango</h1>
+    <br/>
+    {% if result_list %}
+    <div style="clear: both;">
+        <ol>
+        {% for p in result_list.webPages.value  %}
+            <li>
+                <a href="{{p.url}}" target="_blank">{{p.name | safe}}</a>
+            </li>
+        {% endfor %}
+        </ol>
+    </div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

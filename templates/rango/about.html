@@ -1,14 +1,15 @@
 {% extends 'rango/base.html' %}
 {% load staticfiles %}
 {% block title_block %}
-    About
+About
 {% endblock %}
 {% block body_block %}
-<link rel="stylesheet" href="{% static "css/base.css" %}" /> <!-- CSS -->
-<script src="{% static "js/jquery.js" %}"></script> <!-- JavaScript -->
-</head>
+<link rel="stylesheet" href="{% static "css/base.css" %}" /> 
 <body>
-<h1>This is About page</h1>
-Visits: {{ count }}
-<img src="{% static "wallmax.jpg" %}" alt="Picture in About" /> <!-- Images -->
+    <h1>This is About page</h1>
+    Visits: {{ count }} <button onClick="alert('You clicked the button using Javascript.');">
+        Click Me - I run Javascript
+    </button>  <button id="about-btn" class="ouch"> Click Me - I'm Javascript on Speed</button><br/>
+    <p>YO BRO!</p><br/>
+    <img src="{% static "wallmax.jpg" %}" alt="Picture in About" width="900"/> 
 {% endblock %}

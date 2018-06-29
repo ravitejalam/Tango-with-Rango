@@ -1,6 +1,5 @@
-from django.shortcuts import render
 from django.template import RequestContext
-from django.shortcuts import render_to_response,render
+from django.shortcuts import render_to_response,render,redirect
 from rango.models import Category
 from rango.models import Page
 from rango.forms import CategoryForm,PageForm
@@ -10,6 +9,8 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+
+from rango.bing_search import run_query
 
 
 def index(request):
@@ -38,14 +39,24 @@ def about(request):
     # return HttpResponse('Rango Says:Here is the about page. <a href="/rango">Home</a>')
 def show_category(request, category_name_slug):
     context_dict = {}
+    context_dict['result_list'] = None
+    context_dict['query'] = None
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+    if query:
+        result_list = run_query(query)
+        context_dict['result_list'] = result_list
+        context_dict['query'] = query
     try:
         category = Category.objects.get(slug=category_name_slug)
-        pages = Page.objects.filter(category=category)
+        context_dict['category_name'] = category.name
+        pages = Page.objects.filter(category=category).order_by('-views')
         context_dict['pages'] = pages
         context_dict['category'] = category
     except Category.DoesNotExist:
-        context_dict['category'] = None
-        context_dict['pages'] = None
+        pass
+    if not context_dict['query']:
+        context_dict['query'] = category.name
     return render(request, 'rango/category.html', context_dict)
 
 def add_category(request):
@@ -88,7 +99,6 @@ def register(request):
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
-        # If the two forms are valid...
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
             user.set_password(user.password)
@@ -153,3 +163,43 @@ def visitor_cookie_handler(request):
     else:
         request.session['last_visit'] = last_visit_cookie
     request.session['visits'] = visits
+
+def search(request):
+	result_list = []
+	if request.method == 'POST':
+		query = request.POST['query'].strip()
+		if query:
+			result_list = run_query(query)
+	return render(request, 'rango/search.html', {'result_list': result_list})
+
+def register_profile(request):
+    print("resister profile")
+
+@login_required
+def profile(request):
+    context = RequestContext(request)
+    cat_list = get_category_list()
+    context_dict = {'cat_list': cat_list}
+    u = User.objects.get(username=request.user)
+    try:
+        up = UserProfile.objects.get(user=u)
+    except:
+        up = None
+    context_dict['user'] = u
+    context_dict['userprofile'] = up
+    return render_to_response('rango/profile.html', context_dict, context)
+
+def track_url(request):
+    page_id = None
+    url = '/rango/'
+    if request.method == 'GET':
+        if 'page_id' in request.GET:
+            page_id = request.GET['page_id']
+            try:
+                page = Page.objects.get(id=page_id)
+                page.views = page.views + 1
+                page.save()
+                url = page.url
+            except:
+                pass
+    return redirect(url)

@@ -1,16 +1,37 @@
 {% extends 'rango/base.html' %}
 {% load staticfiles %}
 {% block title_block %}
-    Login
+    <center>Login</center>
 {% endblock %}
 {% block body_block %}
 <h1>Login to Rango</h1>
-<form id="login_form" method="post" action="/rango/login/">
+<form id="login_form" class="form-signin" method="post" action="/rango/login/">
     {% csrf_token %}
-    Username: <input type="text" name="username" value="" size="50" />
+    <center>Username: <input type="text" name="username" value="" size="50" /></center>
     <br />
-    Password: <input type="password" name="password" value="" size="50" />
+    <center>Password: <input type="password" name="password" value="" size="50" /></center>
     <br />
-    <input type="submit" value="submit" />
+    <center><button class="btn btn-lg btn-primary btn-block" style="padding:5px; width: 180px; height: 40px;" type="submit" value="submit" />Sign in</></center>
 </form>
 {% endblock %}
+
+
+{% comment %}
+{% block body_block %}
+<link href="{% static "/signin.css" %}" rel="stylesheet">
+<div class="jumbotron">
+<h1 class="display-3">Login</h1>
+</div>
+<form class="form-signin" role="form" method="post" action=".">
+{% csrf_token %}
+<h2 class="form-signin-heading">Please sign in</h2>
+<label for="inputUsername" class="sr-only">Username</label>
+<input type="text" id="id_username" class="form-control"
+placeholder="Username" required autofocus>
+<label for="inputPassword" class="sr-only">Password</label>
+<input type="password" id="id_password" class="form-control"
+placeholder="Password" required>
+<button class="btn btn-lg btn-primary btn-block" type="submit"
+value="Submit" />Sign in</button>
+</form>
+{% endblock %}{% endcomment %}

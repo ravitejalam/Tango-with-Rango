@@ -12,4 +12,8 @@ urlpatterns = [
     url(r'^login/$', views.user_login, name='login'),
     url(r'^restricted/', views.restricted, name='restricted'),
     url(r'^logout/$', views.user_logout, name='logout'),
+    url(r'^search/$',views.search, name='search'),
+    url(r'^rango/add_profile/$',views.register_profile,name='UserProfileForm'),
+    url(r'^rango/profile/$',views.profile,name='profile'),
+    url(r'^goto/$', views.track_url, name='goto'),
 ]
