@@ -1,1 +1,1 @@
-web: gunicorn tango_with_django.wsgi
+web: gunicorn tango_with_django_project.wsgi
