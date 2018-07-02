@@ -43,10 +43,10 @@ def show_category(request, category_name_slug):
     context_dict['query'] = None
     if request.method == 'POST':
         query = request.POST['query'].strip()
-    if query:
-        result_list = run_query(query)
-        context_dict['result_list'] = result_list
-        context_dict['query'] = query
+        if query:
+            result_list = run_query(query)
+            context_dict['result_list'] = result_list
+            context_dict['query'] = query
     try:
         category = Category.objects.get(slug=category_name_slug)
         context_dict['category_name'] = category.name

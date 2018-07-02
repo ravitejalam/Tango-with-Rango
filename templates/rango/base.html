@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
+{% load staticfiles %}
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -82,19 +82,26 @@
 			        name="suggestion" value="" id="suggestion" />
             </li>
             </form>
-	        </ul>
+          </ul>
           <hr />
-	    <div id="cats">
-	  </div>
-
-
+          {% comment %}
+          <div class="well sidebar-nav" style="padding: 10px;">
+            <strong>Category List</strong>
+              <ul class="nav nav-list">
+                  {% if cat_list %}
+                  {% for cat in cat_list %}
+                  <li><a href="/rango/category/{{ cat.slug }}">{{ cat.name }}</a></li><br/></li>
+                  {% endfor %}
+                  {% else %}
+                  <li>No categories at present.</li>
+                  {% endif %}
+              </ul>
+          </div>{% endcomment %}
         </div>
         <div class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 main" style="padding: 8px;">
          {% block body_block %}
          
          {% endblock %}
-
-
         </div>
       </div>
     </div>
