@@ -77,11 +77,6 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
-
 WSGI_APPLICATION = 'tango_with_django_project.wsgi.application'
 
 # Database
@@ -140,10 +135,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
-STATIC_PATH=os.path.join(PROJECT_PATH,'static')
+STATIC_ROOT = os.path.join(PROJECT_PATH, 'assets')
+# STATIC_PATH=os.path.join(PROJECT_PATH,'static')
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,'static'),
+    os.path.join(BASE_DIR, 'static'),
     )
 
 MEDIA_URL = '/media/'
