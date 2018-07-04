@@ -40,10 +40,10 @@
               <a class="nav-link" href="{% url 'rango:add_category' %}">Add a New Category</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'rango:profile' %}">Your Profile</a>
+                <a class="nav-link" href="{% url 'rango:profile' user.username %}">Your Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">All Profile</a>
+                <a class="nav-link" href="{% url 'rango:list_profiles' %}">All Profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/rango/logout/">Logout</a>
@@ -55,9 +55,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/rango/login/">Login</a>
             </li>
-        {% endif %}context_dict['user'] = ucontext_dict['user'] = u
-            context_dict['userprofile'] = up
-            context_dict['userprofile'] = up
+        {% endif %}
             <li class="pull navbar-toggler-right">
               <form action="/rango/search/" method="POST">
               {% csrf_token %}
@@ -69,32 +67,35 @@
       </div>
     </nav>
 
-    <div class="container-fluid">
-      <div class="row" style="padding: 15px;">
-        <div class="col-sm-3 col-md-2 sidebar" style="background-color:  #aeb6bf ;">
-
-          <ul class="nav nav-pills flex-column" style="padding: 8px;">
-		      <li class="nav-item">Type to find a category</li>
-          <form class="form-inline" id="user_form" method="post" action="/rango/category/{{ category.slug }}/">
-		        <li class="nav-item"><input class="search-query form-control" type="text"
-			        name="suggestion" value="" id="suggestion" />
-            </li>
-            </form>
-          </ul>
-          <hr />
-          {% comment %}
-          <div class="well sidebar-nav" style="padding: 10px;">
-            <strong>Category List</strong>
-              <ul class="nav nav-list">
-                  {% if cat_list %}
-                  {% for cat in cat_list %}
-                  <li><a href="/rango/category/{{ cat.slug }}">{{ cat.name }}</a></li><br/></li>
-                  {% endfor %}
-                  {% else %}
-                  <li>No categories at present.</li>
-                  {% endif %}
-              </ul>
-          </div>{% endcomment %}
+          <div class="container-fluid">
+            <div class="row" style="padding: 15px;">
+              <div class="col-sm-3 col-md-2 sidebar" style="background-color:  #aeb6bf ;">
+      
+                  <!-- <ul class="nav nav-pills flex-column">
+                  <li class="nav-item">Type to find a category</li>
+                    <form>
+                    <li class="nav-item"><input class="search-query form-control" type="text"
+                      name="suggestion" value="" id="suggestion" autocomplete="off" />
+                    </li>
+                  </form>
+                </ul>
+                  <hr /> -->
+                  <div class="well sidebar-nav" style="padding: 10px;">
+                    <strong>Category List</strong>
+                      <ul class="nav nav-list">
+                          {% if categories %}
+                          <ul>
+                              {% for category in categories %}
+                              <li><a href="/rango/category/{{ category.slug }}">{{ category.name }}</a> ({{category.likes}} likes)</li>
+                              {% endfor %}
+                          </ul>
+                              {% else %}
+                          <strong>There are no categories present.</strong>
+                          {% endif %}
+                      </ul>
+                  </div>
+            <div id="cats">
+      </div>
         </div>
         <div class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 main" style="padding: 8px;">
          {% block body_block %}

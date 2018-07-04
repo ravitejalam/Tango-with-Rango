@@ -13,7 +13,10 @@ urlpatterns = [
     url(r'^restricted/', views.restricted, name='restricted'),
     url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^search/$',views.search, name='search'),
-    url(r'^rango/add_profile/$',views.register_profile,name='UserProfileForm'),
+    url(r'^add_profile/$',views.register_profile,name='UserProfileForm'),
     url(r'^rango/profile/$',views.profile,name='profile'),
+    url(r'^profile/(?P<username>[\w\-]+)/$', views.profile, name='profile'),
+    url(r'^suggest_category/', views.suggest_category, name='suggest_category'),
     url(r'^goto/$', views.track_url, name='goto'),
+    url(r'^profiles/$', views.list_profiles, name='list_profiles'),
 ]
