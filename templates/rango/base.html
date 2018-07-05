@@ -84,9 +84,9 @@
                   <div class="well sidebar-nav" style="padding: 10px;">
                     <strong>Category List</strong>
                       <ul class="nav nav-list">
-                          {% if categories %}
+                          {% if cat_list %}
                           <ul>
-                              {% for category in categories %}
+                              {% for category in cat_list %}
                               <li><a href="/rango/category/{{ category.slug }}">{{ category.name }}</a> ({{category.likes}} likes)</li>
                               {% endfor %}
                           </ul>

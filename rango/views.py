@@ -35,8 +35,7 @@ def index(request):
     context_dict = {'categories': category_list, 'pages': pages_list}
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
-    cat_list=get_category_list()
-    context_dict['cat_list']=cat_list
+    context_dict['cat_list']= Category.objects.order_by('-views')
     response = render(request, 'rango/index.html', context_dict)
     return response
 
@@ -47,7 +46,9 @@ def about(request):
         request.session.delete_test_cookie()
     context = RequestContext(request)
     visit = int(request.COOKIES.get('visits', '1'))
-    return render(request, 'rango/about.html', {'count': visit}, context)
+    context_dict={'count':visit}
+    context_dict['cat_list']= Category.objects.order_by('-views')
+    return render(request, 'rango/about.html', context_dict, context)
 
     # return HttpResponse('Rango Says:Here is the about page. <a href="/rango">Home</a>')
 
@@ -68,6 +69,7 @@ def show_category(request, category_name_slug):
         pages = Page.objects.filter(category=category).order_by('-views')
         context_dict['pages'] = pages
         context_dict['category'] = category
+        context_dict['cat_list']= Category.objects.order_by('-views')
     except Category.DoesNotExist:
         pass
     # if not context_dict['query']:
@@ -84,7 +86,9 @@ def add_category(request):
             return index(request)
         else:
             print(form.errors)
-    return render(request, 'rango/add_category.html', {'form': form})
+    context_dict={'form':form}
+    context_dict['cat_list']= Category.objects.order_by('-views')
+    return render(request, 'rango/add_category.html', context_dict)
 
 
 def add_page(request, category_name_slug):
@@ -109,6 +113,7 @@ def add_page(request, category_name_slug):
         'form': form,
         'category': category
     }
+    context_dict['cat_list']= Category.objects.order_by('-views')
     return render(request, 'rango/add_page.html', context_dict)
 
 
@@ -132,19 +137,20 @@ def register(request):
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
-    return render(request, 'rango/register.html',
-                  {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+    context_dict={'user_form': user_form, 'profile_form': profile_form, 'registered': registered}
+    context_dict['cat_list']= Category.objects.order_by('-views')
+    return render(request, 'rango/register.html',context_dict)
 
 
 def user_login(request):
     context = RequestContext(request)
-
+    context_dict=dict()
+    context_dict['cat_list']= Category.objects.order_by('-views')
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
 
         user = authenticate(username=username, password=password)
-
         if user is not None:
             if user.is_active:
                 login(request, user)
@@ -156,7 +162,7 @@ def user_login(request):
             return HttpResponse('Invalid login details supplied.')
 
     else:
-        return render(request, 'rango/login.html', {}, context)
+        return render(request, 'rango/login.html', context_dict, context)
 
 
 @login_required
@@ -223,8 +229,9 @@ def profile(request, username):
             return redirect('rango:profile', user.username)
         else:
             print(form.errors)
-
-    return render(request, 'rango/profile.html', {'userprofile': userprofile, 'selecteduser': user, 'form': form})
+    context_dict={'userprofile': userprofile, 'selecteduser': user, 'form': form}
+    context_dict['cat_list']= Category.objects.order_by('-views')
+    return render(request, 'rango/profile.html', context_dict)
 
 
 def track_url(request):
@@ -247,7 +254,9 @@ def track_url(request):
 def list_profiles(request):
     #    user_list = User.objects.all()
     userprofile_list = UserProfile.objects.all()
-    return render(request, 'rango/list_profiles.html', {'userprofile_list': userprofile_list})
+    context_dict={'userprofile_list': userprofile_list}
+    context_dict['cat_list']= Category.objects.order_by('-views')
+    return render(request, 'rango/list_profiles.html',context_dict)
 
 
 def suggest_category(request):
